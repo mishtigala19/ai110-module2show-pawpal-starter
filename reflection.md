@@ -7,6 +7,16 @@
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
+My initial UML design included four main classes: Owner, Pet, Task, and Scheduler.
+
+The Owner class is responsible for managing the overall system from the user’s side. It stores the owner’s name and a collection of pets, and it provides methods to add pets and access all pets in the system.
+
+The Pet class represents an individual pet. It stores information such as the pet’s name, species, age, and the list of tasks assigned to that pet. Its main responsibility is to keep track of pet-specific care activities like feedings, walks, medications, and appointments.
+
+The Task class represents a single scheduled activity. I planned for it to store attributes such as a description, scheduled time, frequency, due date, and completion status. Its responsibility is to model one care action clearly so it can be sorted, filtered, completed, and reused for recurring schedules.
+
+The Scheduler class acts as the system’s logic layer. Its responsibility is to gather tasks across pets, sort them by time, filter them by status or pet, detect scheduling conflicts, and later support recurring task behavior. I separated this class from Owner and Pet so that the scheduling logic would stay organized and easier to test.
+
 **b. Design changes**
 
 - Did your design change during implementation?
