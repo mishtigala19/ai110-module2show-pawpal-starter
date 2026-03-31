@@ -4,23 +4,21 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
-
 My initial UML design included four main classes: Owner, Pet, Task, and Scheduler.
 
 The Owner class is responsible for managing the overall system from the user’s side. It stores the owner’s name and a collection of pets, and it provides methods to add pets and access all pets in the system.
 
 The Pet class represents an individual pet. It stores information such as the pet’s name, species, age, and the list of tasks assigned to that pet. Its main responsibility is to keep track of pet-specific care activities like feedings, walks, medications, and appointments.
 
-The Task class represents a single scheduled activity. I planned for it to store attributes such as a description, scheduled time, frequency, due date, and completion status. Its responsibility is to model one care action clearly so it can be sorted, filtered, completed, and reused for recurring schedules.
+The Task class represents a single scheduled activity. It stores attributes such as a description, scheduled time, frequency, due date, pet name, and completion status. Its responsibility is to model one care action clearly so it can be sorted, filtered, completed, and reused for recurring schedules.
 
-The Scheduler class acts as the system’s logic layer. Its responsibility is to gather tasks across pets, sort them by time, filter them by status or pet, detect scheduling conflicts, and later support recurring task behavior. I separated this class from Owner and Pet so that the scheduling logic would stay organized and easier to test.
+The Scheduler class acts as the system’s logic layer. Its responsibility is to gather tasks across pets, sort them by time, filter them by status or pet, detect scheduling conflicts, and support recurring task behavior. I separated this class from Owner and Pet so that the scheduling logic would stay organized and easier to test.
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+During implementation, I made a design change by keeping the scheduling logic inside the Scheduler class instead of spreading it across the Owner and Pet classes. Initially, I considered putting more logic inside the Owner class, but that made the design less clear.
+
+Separating the Scheduler made the system more modular and easier to test. It also made it easier to organize features like sorting, filtering, conflict detection, and recurring tasks.
 
 ---
 
@@ -28,13 +26,15 @@ The Scheduler class acts as the system’s logic layer. Its responsibility is to
 
 **a. Constraints and priorities**
 
-- What constraints does your scheduler consider (for example: time, priority, preferences)?
-- How did you decide which constraints mattered most?
+The scheduler considers task time, completion status, and which pet a task belongs to. Time is the most important constraint because tasks need to be shown in chronological order.
+
+I decided that time matters most because the main goal of the system is to help the owner understand what needs to be done and when. Filtering by pet and completion status is also useful but comes after time-based organization.
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+One tradeoff my scheduler makes is that it only detects conflicts when two tasks have the exact same scheduled time. It does not handle overlapping durations.
+
+This tradeoff is reasonable for this project because the system uses simple time-based scheduling and keeps the implementation easier to understand and test.
 
 ---
 
@@ -42,13 +42,15 @@ The Scheduler class acts as the system’s logic layer. Its responsibility is to
 
 **a. How you used AI**
 
-- How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
-- What kinds of prompts or questions were most helpful?
+I used AI tools for brainstorming the system design, generating class structures, implementing methods, and creating test cases. AI was especially helpful in organizing the system and deciding how different classes should interact.
+
+The most helpful prompts were specific ones, such as asking how to sort tasks by time, how to implement recurring task logic, and how to structure the scheduler.
 
 **b. Judgment and verification**
 
-- Describe one moment where you did not accept an AI suggestion as-is.
-- How did you evaluate or verify what the AI suggested?
+One moment where I did not accept an AI suggestion directly was when deciding where to place the scheduling logic. Instead of placing too much logic inside the Owner class, I kept it in a separate Scheduler class to keep the design clean and modular.
+
+I verified AI suggestions by running the program, checking terminal outputs, and ensuring that all pytest tests passed before accepting the solution.
 
 ---
 
@@ -56,13 +58,15 @@ The Scheduler class acts as the system’s logic layer. Its responsibility is to
 
 **a. What you tested**
 
-- What behaviors did you test?
-- Why were these tests important?
+I tested task completion, task addition, sorting by time, recurring task creation, and conflict detection.
+
+These tests were important because they verify the core functionality of the system and ensure that the scheduler behaves correctly.
 
 **b. Confidence**
 
-- How confident are you that your scheduler works correctly?
-- What edge cases would you test next if you had more time?
+I am highly confident that my scheduler works correctly because all tests passed successfully.
+
+If I had more time, I would test edge cases such as invalid time formats, empty task lists, and more advanced scheduling conflicts involving overlapping durations.
 
 ---
 
@@ -70,12 +74,12 @@ The Scheduler class acts as the system’s logic layer. Its responsibility is to
 
 **a. What went well**
 
-- What part of this project are you most satisfied with?
+The part I am most satisfied with is the scheduling logic. Sorting, filtering, and conflict detection all worked correctly and produced clear and readable output.
 
 **b. What you would improve**
 
-- If you had another iteration, what would you improve or redesign?
+If I had another iteration, I would improve the system by adding support for task durations and more advanced conflict detection. I would also improve the user interface for better visualization of schedules.
 
 **c. Key takeaway**
 
-- What is one important thing you learned about designing systems or working with AI on this project?
+One important thing I learned is that separating data structures from logic makes systems easier to design, test, and maintain. I also learned that AI is a powerful tool for speeding up development, but it is important to verify and refine its suggestions.
