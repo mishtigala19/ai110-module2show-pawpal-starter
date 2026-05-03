@@ -28,15 +28,15 @@ The new AI feature is a small retrieval-augmented generation system.
 
 When the user enters a pet-care concern, the system:
 
-1. Validates the input.
-2. Searches a pet-care knowledge base.
-3. Retrieves the most relevant care topic.
-4. Generates a recommendation grounded in the retrieved information.
-5. Assigns an urgency level.
-6. Calculates a confidence score.
-7. Triggers guardrails for emergencies or unknown concerns.
+1. Validates the input  
+2. Searches a pet-care knowledge base  
+3. Retrieves the most relevant care topic  
+4. Generates a recommendation grounded in the retrieved information  
+5. Assigns an urgency level  
+6. Calculates a confidence score  
+7. Triggers guardrails for emergencies or unknown concerns  
 
-This is not just a standalone script. The AI feature is integrated into the Streamlit app and can also be demonstrated through the CLI script `ai_demo.py`.
+This feature is fully integrated into the system through both the CLI (`ai_demo.py`) and the Streamlit app (`app.py`).
 
 ---
 
@@ -44,48 +44,57 @@ This is not just a standalone script. The AI feature is integrated into the Stre
 
 ### Original PawPal+ Scheduling Features
 
-- Add pets
-- Add care tasks
-- Generate today's schedule
-- Sort tasks by time
-- Filter tasks by pet
-- Filter tasks by completion status
-- Detect scheduling conflicts
-- Create recurring daily or weekly tasks
+- Add pets  
+- Add care tasks  
+- Generate today's schedule  
+- Sort tasks by time  
+- Filter tasks by pet  
+- Filter tasks by completion status  
+- Detect scheduling conflicts  
+- Create recurring daily or weekly tasks  
 
 ### Unit 9 AI Extension Features
 
-- RAG-style retrieval from a pet-care knowledge base
-- AI-generated care recommendations
-- Urgency levels: low, medium, high, unknown
-- Confidence scoring
-- Emergency guardrails
-- Safe fallback when the system does not have enough context
-- CLI demo with multiple example inputs
-- Automated tests for both scheduling and AI advisor behavior
+- RAG-style retrieval from a pet-care knowledge base  
+- AI-generated care recommendations  
+- Urgency levels: low, medium, high, unknown  
+- Confidence scoring  
+- Emergency guardrails  
+- Safe fallback when the system does not have enough context  
+- CLI demo with multiple example inputs  
+- Automated tests for both scheduling and AI advisor behavior  
 
 ---
 
 ## System Architecture
 
-The system has two connected parts:
+The system consists of two main components:
 
-1. **Scheduling System**
-   - `Owner`, `Pet`, `Task`, and `Scheduler`
-   - Manages structured pet care routines
+### 1. Scheduling System
+- `Owner`, `Pet`, `Task`, and `Scheduler`
+- Handles structured pet care routines
 
-2. **AI Care Advisor**
-   - `CareAdvisor`
-   - `CARE_KNOWLEDGE_BASE`
-   - Retrieves pet-care information and generates grounded recommendations
+### 2. AI Care Advisor
+- `CareAdvisor`
+- `CARE_KNOWLEDGE_BASE`
+- Performs retrieval and generates grounded recommendations
 
-The user can interact with the system through:
+### Data Flow
 
-- `app.py` for the Streamlit interface
-- `main.py` for the original scheduling demo
-- `ai_demo.py` for the AI care advisor demo
+User → Streamlit UI → CareAdvisor → Knowledge Base → Response (urgency + confidence + recommendation)
 
-Architecture diagram source is stored in:
+---
 
-```text
-assets/architecture_diagram.mmd
+## Demo Walkthrough
+
+[Watch the demo video](https://drive.google.com/file/d/1BZmcGnuxndADRjMrweC8AUZClN0VMTpf/view?usp=sharing)
+
+---
+
+## Setup Instructions
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/mishtigala19/ai110-module2show-pawpal-starter.git
+cd ai110-module2show-pawpal-starter
