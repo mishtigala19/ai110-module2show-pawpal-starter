@@ -1,37 +1,91 @@
-# PawPal+ (Module 2 Project)
+# PawPal+ AI Care Advisor
 
-PawPal+ is a Streamlit app that helps a pet owner manage pet care tasks and generate a daily schedule.
+## Project Summary
 
-## Scenario
+PawPal+ AI Care Advisor is an applied AI system that extends the original PawPal+ pet care scheduler into a more intelligent and reliable pet-care assistant.
 
-A busy pet owner needs help staying consistent with pet care. This system helps track and organize tasks such as walks, feeding, medication, grooming, and appointments.
+The original PawPal+ system helped pet owners manage daily routines such as feedings, walks, medications, grooming, and appointments. It used Python object-oriented programming with Owner, Pet, Task, and Scheduler classes to organize tasks, sort schedules, detect conflicts, and manage recurring care routines.
+
+For Unit 9, I extended PawPal+ by adding a RAG-style AI Care Advisor. The new system retrieves relevant pet-care information from a structured knowledge base, generates a recommendation, assigns an urgency level, calculates a confidence score, and uses guardrails for emergency or low-confidence situations.
+
+---
+
+## Original Project Extended
+
+**Original project:** PawPal+
+
+**Original goal:** PawPal+ was originally designed as a smart pet care management system. It helped owners track pets, schedule care tasks, sort tasks by time, filter by pet or completion status, detect task conflicts, and support recurring daily or weekly tasks.
+
+**How this project extends it:** The Unit 9 version keeps the original scheduling system and adds an AI-powered care advisor. This makes the system more useful because it not only organizes pet-care tasks, but also helps users reason about pet-care concerns using retrieval, confidence scoring, and safety guardrails.
+
+---
+
+## New AI Feature
+
+### RAG-Style Care Advisor
+
+The new AI feature is a small retrieval-augmented generation system.
+
+When the user enters a pet-care concern, the system:
+
+1. Validates the input.
+2. Searches a pet-care knowledge base.
+3. Retrieves the most relevant care topic.
+4. Generates a recommendation grounded in the retrieved information.
+5. Assigns an urgency level.
+6. Calculates a confidence score.
+7. Triggers guardrails for emergencies or unknown concerns.
+
+This is not just a standalone script. The AI feature is integrated into the Streamlit app and can also be demonstrated through the CLI script `ai_demo.py`.
+
+---
 
 ## Features
 
-- Add pets and tasks
-- Generate a daily schedule
+### Original PawPal+ Scheduling Features
+
+- Add pets
+- Add care tasks
+- Generate today's schedule
 - Sort tasks by time
-- Filter tasks by pet and completion status
+- Filter tasks by pet
+- Filter tasks by completion status
 - Detect scheduling conflicts
-- Support recurring daily and weekly tasks
+- Create recurring daily or weekly tasks
 
-## System Design
+### Unit 9 AI Extension Features
 
-![UML Diagram](mermaid-diagram.png)
+- RAG-style retrieval from a pet-care knowledge base
+- AI-generated care recommendations
+- Urgency levels: low, medium, high, unknown
+- Confidence scoring
+- Emergency guardrails
+- Safe fallback when the system does not have enough context
+- CLI demo with multiple example inputs
+- Automated tests for both scheduling and AI advisor behavior
 
-## Files
+---
 
-- `app.py` - Streamlit user interface
-- `pawpal_system.py` - backend classes and scheduling logic
-- `main.py` - CLI demo script
-- `tests/test_pawpal.py` - automated test suite
-- `reflection.md` - project reflection
+## System Architecture
 
-## Getting Started
+The system has two connected parts:
 
-### Setup
+1. **Scheduling System**
+   - `Owner`, `Pet`, `Task`, and `Scheduler`
+   - Manages structured pet care routines
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+2. **AI Care Advisor**
+   - `CareAdvisor`
+   - `CARE_KNOWLEDGE_BASE`
+   - Retrieves pet-care information and generates grounded recommendations
+
+The user can interact with the system through:
+
+- `app.py` for the Streamlit interface
+- `main.py` for the original scheduling demo
+- `ai_demo.py` for the AI care advisor demo
+
+Architecture diagram source is stored in:
+
+```text
+assets/architecture_diagram.mmd

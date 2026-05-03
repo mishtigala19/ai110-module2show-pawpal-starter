@@ -2,39 +2,38 @@ import streamlit as st
 from datetime import date
 
 from pawpal_system import Owner, Pet, Task, Scheduler
+from care_advisor import CareAdvisor
 
 st.set_page_config(page_title="PawPal+", page_icon="P", layout="centered")
 
 st.title("PawPal+")
+st.subheader("Pet Care Scheduler + AI Care Advisor")
 
 st.markdown(
     """
-Welcome to the PawPal+ app.
-
-This app now connects the Streamlit interface to the backend logic in `pawpal_system.py`.
-You can add pets, assign tasks, and generate a daily schedule using your scheduler.
+PawPal+ began as a pet care scheduling system. For Unit 9, it has been extended into
+an applied AI system with a RAG-style care advisor, guardrails, urgency labels, and
+confidence scoring.
 """
 )
 
-with st.expander("Scenario", expanded=True):
+with st.expander("Original PawPal+ System", expanded=True):
     st.markdown(
         """
-**PawPal+** is a pet care planning assistant. It helps a pet owner plan care tasks
-for their pet(s) and organize them into a clear daily schedule.
+The original PawPal+ system helped pet owners manage care routines such as feedings,
+walks, medications, grooming, and appointments. It used Python classes for Owners,
+Pets, Tasks, and a Scheduler to organize tasks by time, filter tasks, detect conflicts,
+and handle recurring daily or weekly tasks.
 """
     )
 
-with st.expander("What this system does", expanded=True):
+with st.expander("New Unit 9 AI Extension", expanded=True):
     st.markdown(
         """
-This system can:
-- Represent pet care tasks
-- Represent pets and owners
-- Build a schedule for the day
-- Sort tasks by time
-- Filter tasks by pet and completion status
-- Detect task conflicts
-- Support recurring daily and weekly tasks
+The new AI Care Advisor lets a user type a pet-care concern. The system retrieves
+relevant information from a pet-care knowledge base, generates a recommendation,
+assigns an urgency level, calculates a confidence score, and triggers guardrails for
+potential emergencies.
 """
     )
 
@@ -47,11 +46,68 @@ if "owner" not in st.session_state:
 if "owner_name" not in st.session_state:
     st.session_state.owner_name = "Jordan"
 
+if "advisor" not in st.session_state:
+    st.session_state.advisor = CareAdvisor()
+
+st.divider()
+
+# -----------------------------
+# AI Care Advisor
+# -----------------------------
+st.header("AI Care Advisor")
+
+st.markdown(
+    """
+Type a pet-care concern below. PawPal+ will retrieve relevant information from its
+care knowledge base and return a grounded recommendation.
+"""
+)
+
+care_query = st.text_area(
+    "Pet-care concern",
+    value="My dog is vomiting and seems tired.",
+    height=100,
+)
+
+if st.button("Get AI Care Advice"):
+    try:
+        advice = st.session_state.advisor.generate_advice(care_query)
+
+        if advice.urgency == "high":
+            st.error("High urgency: contact a veterinarian or emergency animal hospital immediately.")
+        elif advice.urgency == "medium":
+            st.warning("Medium urgency: monitor closely and contact a veterinarian if symptoms continue.")
+        elif advice.urgency == "low":
+            st.success("Low urgency: routine care guidance found.")
+        else:
+            st.info("No strong match found. Use caution and contact a veterinarian if needed.")
+
+        st.markdown("### AI Recommendation")
+        st.write(advice.recommendation)
+
+        st.markdown("### Reliability Information")
+        st.table(
+            [
+                {
+                    "Matched Topic": advice.matched_topic,
+                    "Urgency": advice.urgency,
+                    "Confidence": advice.confidence,
+                    "Guardrail Triggered": advice.guardrail_triggered,
+                    "Sources Used": ", ".join(advice.sources_used) if advice.sources_used else "None",
+                }
+            ]
+        )
+
+    except ValueError as error:
+        st.warning(str(error))
+
 st.divider()
 
 # -----------------------------
 # Owner section
 # -----------------------------
+st.header("Scheduling System")
+
 st.subheader("Owner Information")
 
 owner_name = st.text_input("Owner name", value=st.session_state.owner_name)
@@ -67,7 +123,7 @@ if st.button("Update Owner"):
 st.subheader("Add a Pet")
 
 pet_name = st.text_input("Pet name")
-species = st.selectbox("Species", ["dog", "cat", "other"])
+species = st.selectbox("Species", ["dog", "cat", "rabbit", "bird", "other"])
 age = st.number_input("Pet age", min_value=0, max_value=30, value=1)
 
 if st.button("Add Pet"):
@@ -170,8 +226,6 @@ st.divider()
 # -----------------------------
 st.subheader("Build Schedule")
 
-st.caption("This uses your backend scheduler logic to generate today's schedule.")
-
 scheduler = Scheduler(st.session_state.owner)
 
 if st.button("Generate Schedule"):
@@ -214,14 +268,14 @@ st.subheader("Filter Tasks")
 if st.session_state.owner.pets:
     filter_pet = st.selectbox(
         "Filter by pet",
-        ["All Pets"] + [pet.name for pet in st.session_state.owner.pets]
+        ["All Pets"] + [pet.name for pet in st.session_state.owner.pets],
     )
 else:
     filter_pet = "All Pets"
 
 filter_status = st.selectbox(
     "Filter by completion status",
-    ["All", "Completed", "Incomplete"]
+    ["All", "Completed", "Incomplete"],
 )
 
 if st.button("Apply Filters"):
@@ -238,7 +292,7 @@ if st.button("Apply Filters"):
 
     filtered_tasks = scheduler.filter_tasks(
         completed=completed_value,
-        pet_name=pet_value
+        pet_name=pet_value,
     )
 
     if filtered_tasks:
